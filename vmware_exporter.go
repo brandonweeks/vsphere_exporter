@@ -33,7 +33,7 @@ import (
 )
 
 var (
-	listenAddress     = flag.String("web.listen-address", ":9103", "Address on which to expose metrics and web interface.")
+	listenAddress     = flag.String("web.listen-address", ":9155", "Address on which to expose metrics and web interface.")
 	metricsPath       = flag.String("web.telemetry-path", "/metrics", "Path under which to expose Prometheus metrics.")
 	vsphereHostname   = flag.String("vsphere.hostname", "localhost", "")
 	vsphereUsername   = flag.String("vsphere.username", "administrator@vsphere.local", "")
