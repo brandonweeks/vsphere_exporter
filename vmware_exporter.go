@@ -18,6 +18,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"regexp"
 	"strings"
 
 	"golang.org/x/net/context"
@@ -27,6 +28,7 @@ import (
 	"github.com/serenize/snaker"
 	"github.com/vmware/govmomi"
 	"github.com/vmware/govmomi/find"
+	"github.com/vmware/govmomi/property"
 	"github.com/vmware/govmomi/vim25/methods"
 	"github.com/vmware/govmomi/vim25/mo"
 	"github.com/vmware/govmomi/vim25/types"
@@ -74,13 +76,21 @@ func NewExporter() *Exporter {
 }
 
 var countersInfoMap = make(map[int]*prometheus.Desc)
+var perfCounters = make(map[int]types.PerfCounterInfo)
 
 func (e *Exporter) Describe(ch chan<- *prometheus.Desc) {
 	for _, perfCounterInfo := range e.performanceManager.PerfCounter {
+		perfCounters[int(perfCounterInfo.Key)] = perfCounterInfo
 		groupInfo := perfCounterInfo.GroupInfo.GetElementDescription()
 		nameInfo := perfCounterInfo.NameInfo.GetElementDescription()
 		metricName := fmt.Sprintf("vsphere_%s_%s", snaker.CamelToSnake(groupInfo.Key), strings.Join(strings.Split(snaker.CamelToSnake(nameInfo.Key), "."), "_"))
-		labels := []string{"host", "instance", "entity"}
+		// labels := []string{"host", "instance", "entity"}
+		//
+		labels := []string{"host"}
+		if groupInfo.Key == "datastore" {
+			labels = append(labels, "datastore")
+		}
+		//
 		desc := prometheus.NewDesc(metricName, nameInfo.Summary, labels, nil)
 		countersInfoMap[int(perfCounterInfo.Key)] = desc
 		ch <- desc
@@ -99,6 +109,43 @@ func (e *Exporter) Collect(ch chan<- prometheus.Metric) {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	//
+	storagePods, err := finder.DatastoreClusterList(e.ctx, "*")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var refs []types.ManagedObjectReference
+	for _, pod := range storagePods {
+		dss, err := pod.Children(e.ctx)
+		if err != nil {
+			log.Fatal(err)
+		}
+		for _, datastore := range dss {
+			refs = append(refs, datastore.Reference())
+		}
+	}
+
+	var datastores []mo.Datastore
+	pc := property.DefaultCollector(e.client.Client)
+	err = pc.Retrieve(e.ctx, refs, nil, &datastores)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	r, err := regexp.Compile(`ds:///vmfs/volumes/([\w-]*)/`)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var uuidToDatstore = make(map[string]string)
+	for _, ds := range datastores {
+		uuid := r.FindStringSubmatch(ds.Info.GetDatastoreInfo().Url)[1]
+		uuidToDatstore[uuid] = ds.Name
+	}
+
+	//
 
 	for _, host := range hosts {
 		hostName := host.Name()
@@ -121,9 +168,15 @@ func (e *Exporter) Collect(ch chan<- prometheus.Metric) {
 			metric := base.(*types.PerfEntityMetric)
 			for _, baseSeries := range metric.Value {
 				series := baseSeries.(*types.PerfMetricIntSeries)
+				perfCounterInfo := perfCounters[int(series.Id.CounterId)]
+
+				if perfCounterInfo.GroupInfo.GetElementDescription().Key != "datastore" {
+					continue
+				}
 				desc := countersInfoMap[int(series.Id.CounterId)]
+				datastoreTag := uuidToDatstore[series.Id.Instance]
 				ch <- prometheus.MustNewConstMetric(desc,
-					prometheus.GaugeValue, float64(series.Value[0]), hostName, series.Id.Instance, metric.Entity.Type)
+					prometheus.GaugeValue, float64(series.Value[0]), hostName, datastoreTag)
 			}
 		}
 	}
