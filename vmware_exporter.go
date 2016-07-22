@@ -16,9 +16,13 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"net/url"
+	"os"
 	"strings"
+
+	"gopkg.in/yaml.v2"
 
 	"golang.org/x/net/context"
 
@@ -33,24 +37,56 @@ import (
 )
 
 var (
-	listenAddress     = flag.String("web.listen-address", ":9155", "Address on which to expose metrics and web interface.")
-	metricsPath       = flag.String("web.telemetry-path", "/metrics", "Path under which to expose Prometheus metrics.")
-	vsphereHostname   = flag.String("vsphere.hostname", "localhost", "")
-	vsphereUsername   = flag.String("vsphere.username", "administrator@vsphere.local", "")
-	vspherePassword   = flag.String("vsphere.password", "vmware", "")
-	vsphereDatacenter = flag.String("vsphere.datacenter", "Datacenter", "")
+	listenAddress = flag.String("web.listen-address", ":9155", "Address on which to expose metrics and web interface.")
+	metricsPath   = flag.String("web.telemetry-path", "/metrics", "Path under which to expose Prometheus metrics.")
+	configFile    = flag.String("config.file", "", "vsphere_exporter configuration file name.")
 )
+
+type Config struct {
+	Hostname   string
+	Username   string
+	Password   string
+	Datacenter string
+}
 
 type Exporter struct {
 	ctx                context.Context
 	client             govmomi.Client
 	performanceManager mo.PerformanceManager
+	finder             find.Finder
 }
 
-func NewExporter() *Exporter {
+func DefaultConfig() *Config {
+	config := &Config{
+		Hostname:   "localhost",
+		Username:   "administrator@vsphere.local",
+		Password:   "",
+		Datacenter: "",
+	}
+
+	if hostname := os.Getenv("VSPHERE_HOSTNAME"); hostname != "" {
+		config.Hostname = hostname
+	}
+
+	if username := os.Getenv("VSPHERE_USERNAME"); username != "" {
+		config.Username = username
+	}
+
+	if password := os.Getenv("VSPHERE_PASSWORD"); password != "" {
+		config.Password = password
+	}
+
+	if datacenter := os.Getenv("VSPHERE_DATACENTER"); datacenter != "" {
+		config.Datacenter = datacenter
+	}
+
+	return config
+}
+
+func NewExporter(config *Config) *Exporter {
 	ctx, _ := context.WithCancel(context.Background())
 
-	u, err := url.Parse(fmt.Sprintf("https://%s:%s@%s/sdk", *vsphereUsername, *vspherePassword, *vsphereHostname))
+	u, err := url.Parse(fmt.Sprintf("https://%s:%s@%s/sdk", config.Username, config.Password, config.Hostname))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -66,10 +102,19 @@ func NewExporter() *Exporter {
 		log.Fatal(err)
 	}
 
+	finder := find.NewFinder(client.Client, true)
+	datacenter, err := finder.Datacenter(ctx, config.Datacenter)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	finder.SetDatacenter(datacenter)
+
 	return &Exporter{
 		ctx:                ctx,
 		client:             *client,
 		performanceManager: performanceManager,
+		finder:             *finder,
 	}
 }
 
@@ -88,14 +133,7 @@ func (e *Exporter) Describe(ch chan<- *prometheus.Desc) {
 }
 
 func (e *Exporter) Collect(ch chan<- prometheus.Metric) {
-	finder := find.NewFinder(e.client.Client, true)
-	datacenter, err := finder.Datacenter(e.ctx, *vsphereDatacenter)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	finder.SetDatacenter(datacenter)
-	hosts, err := finder.HostSystemList(e.ctx, "*")
+	hosts, err := e.finder.HostSystemList(e.ctx, "*")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -132,7 +170,21 @@ func (e *Exporter) Collect(ch chan<- prometheus.Metric) {
 func main() {
 	flag.Parse()
 
-	exporter := NewExporter()
+	config := DefaultConfig()
+
+	if *configFile != "" {
+		yamlFile, err := ioutil.ReadFile(*configFile)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		err = yaml.Unmarshal(yamlFile, &config)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	exporter := NewExporter(config)
 	prometheus.MustRegister(exporter)
 
 	http.Handle(*metricsPath, prometheus.Handler())
