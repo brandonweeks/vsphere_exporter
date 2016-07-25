@@ -1,0 +1,5 @@
+---
+hostname: "vcenter.example.com"
+username: "administrator@vsphere.local"
+password: ""
+datacenter: ""
