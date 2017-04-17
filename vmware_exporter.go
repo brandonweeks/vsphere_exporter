@@ -160,8 +160,10 @@ func (e *Exporter) Collect(ch chan<- prometheus.Metric) {
 			for _, baseSeries := range metric.Value {
 				series := baseSeries.(*types.PerfMetricIntSeries)
 				desc := countersInfoMap[int(series.Id.CounterId)]
-				ch <- prometheus.MustNewConstMetric(desc,
-					prometheus.GaugeValue, float64(series.Value[0]), hostName, series.Id.Instance, metric.Entity.Type)
+				if desc != nil {
+					ch <- prometheus.MustNewConstMetric(desc,
+						prometheus.GaugeValue, float64(series.Value[0]), hostName, series.Id.Instance, metric.Entity.Type)
+				}
 			}
 		}
 	}
