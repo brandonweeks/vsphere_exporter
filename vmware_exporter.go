@@ -124,6 +124,7 @@ func (e *Exporter) Describe(ch chan<- *prometheus.Desc) {
 	for _, perfCounterInfo := range e.performanceManager.PerfCounter {
 		groupInfo := perfCounterInfo.GroupInfo.GetElementDescription()
 		nameInfo := perfCounterInfo.NameInfo.GetElementDescription()
+		unitInfo := perfCounterInfo.UnitInfo.GetElementDescription()
 		metricName := fmt.Sprintf("vsphere_%s_%s_%s", snaker.CamelToSnake(groupInfo.Key), strings.Join(strings.Split(snaker.CamelToSnake(nameInfo.Key), "."), "_"), snaker.CamelToSnake(unitInfo.Key))
 		labels := []string{"host", "instance", "entity"}
 		desc := prometheus.NewDesc(metricName, nameInfo.Summary, labels, nil)
