@@ -33,6 +33,12 @@
 			"revisionTime": "2017-06-06T10:22:53Z"
 		},
 		{
+			"checksumSHA1": "NSP9xOC+gAoQXDveDdSdeGmEYIA=",
+			"path": "github.com/prometheus/client_golang/prometheus/promhttp",
+			"revision": "de4d4ffe63b9eff7f27484fdef6e421597e6abb4",
+			"revisionTime": "2017-06-06T10:22:53Z"
+		},
+		{
 			"checksumSHA1": "DvwvOlPNAgRntBzt3b3OSRMS2N4=",
 			"path": "github.com/prometheus/client_model/go",
 			"revision": "6f3806018612930941127f2a7c6c453ba2c527d2",
@@ -51,16 +57,22 @@
 			"revisionTime": "2017-04-27T09:54:55Z"
 		},
 		{
+			"checksumSHA1": "vfkLfDs6hXtxdJNGdWQglsxFu40=",
+			"path": "github.com/prometheus/common/log",
+			"revision": "13ba4ddd0caa9c28ca7b7bffe1dfa9ed8d5ef207",
+			"revisionTime": "2017-04-27T09:54:55Z"
+		},
+		{
 			"checksumSHA1": "0LL9u9tfv1KPBjNEiMDP6q7lpog=",
 			"path": "github.com/prometheus/common/model",
 			"revision": "13ba4ddd0caa9c28ca7b7bffe1dfa9ed8d5ef207",
 			"revisionTime": "2017-04-27T09:54:55Z"
 		},
 		{
-			"checksumSHA1": "ziqY/FHc6pialrm9Xd2wUlS9f5w=",
-			"path": "github.com/prometheus/log",
-			"revision": "9a3136781e1ff7bc42736ba4acb81339b1422551",
-			"revisionTime": "2015-10-26T01:24:52Z"
+			"checksumSHA1": "91KYK0SpvkaMJJA2+BcxbVnyRO0=",
+			"path": "github.com/prometheus/common/version",
+			"revision": "13ba4ddd0caa9c28ca7b7bffe1dfa9ed8d5ef207",
+			"revisionTime": "2017-04-27T09:54:55Z"
 		},
 		{
 			"checksumSHA1": "BXx+yybEN6zHgNupHbRa1troevA=",
@@ -179,6 +191,24 @@
 		{
 			"checksumSHA1": "Tkb1hBdBWeO7SGjixS2Hm48F6+s=",
 			"path": "golang.org/x/sys/unix",
+			"revision": "0b25a408a50076fbbcae6b7ac0ea5fbb0b085e79",
+			"revisionTime": "2017-06-08T11:43:49Z"
+		},
+		{
+			"checksumSHA1": "2Coyr3Bq1dPkFg+ZYHEq1+/Rn58=",
+			"path": "golang.org/x/sys/windows",
+			"revision": "0b25a408a50076fbbcae6b7ac0ea5fbb0b085e79",
+			"revisionTime": "2017-06-08T11:43:49Z"
+		},
+		{
+			"checksumSHA1": "ZdFZFaXmCgEEaEhVPkyXrnhKhsg=",
+			"path": "golang.org/x/sys/windows/registry",
+			"revision": "0b25a408a50076fbbcae6b7ac0ea5fbb0b085e79",
+			"revisionTime": "2017-06-08T11:43:49Z"
+		},
+		{
+			"checksumSHA1": "uVlUSSKplihZG7N+QJ6fzDZ4Kh8=",
+			"path": "golang.org/x/sys/windows/svc/eventlog",
 			"revision": "0b25a408a50076fbbcae6b7ac0ea5fbb0b085e79",
 			"revisionTime": "2017-06-08T11:43:49Z"
 		},
