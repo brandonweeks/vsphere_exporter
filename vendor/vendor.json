@@ -1,0 +1,193 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "Liv7AJyNinmP3pvwohcXp4R6xY4=",
+			"path": "github.com/Sirupsen/logrus",
+			"revision": "85b1699d505667d13f8ac4478c1debbf85d6c5de",
+			"revisionTime": "2017-06-08T22:14:41Z"
+		},
+		{
+			"checksumSHA1": "spyv5/YFBjYyZLZa1U2LBfDR8PM=",
+			"path": "github.com/beorn7/perks/quantile",
+			"revision": "4c0e84591b9aa9e6dcfdf3e020114cd81f89d5f9",
+			"revisionTime": "2016-08-04T10:47:26Z"
+		},
+		{
+			"checksumSHA1": "qlPUeFabwF4RKAOF1H+yBFU1Veg=",
+			"path": "github.com/golang/protobuf/proto",
+			"revision": "e325f446bebc2998605911c0a2650d9920361d4a",
+			"revisionTime": "2017-06-13T22:42:24Z"
+		},
+		{
+			"checksumSHA1": "bKMZjd2wPw13VwoE7mBeSv5djFA=",
+			"path": "github.com/matttproud/golang_protobuf_extensions/pbutil",
+			"revision": "c12348ce28de40eed0136aa2b644d0ee0650e56c",
+			"revisionTime": "2016-04-24T11:30:07Z"
+		},
+		{
+			"checksumSHA1": "8oKQtUZLRuxPAQ9bHKqPkOda0hM=",
+			"path": "github.com/prometheus/client_golang/prometheus",
+			"revision": "de4d4ffe63b9eff7f27484fdef6e421597e6abb4",
+			"revisionTime": "2017-06-06T10:22:53Z"
+		},
+		{
+			"checksumSHA1": "DvwvOlPNAgRntBzt3b3OSRMS2N4=",
+			"path": "github.com/prometheus/client_model/go",
+			"revision": "6f3806018612930941127f2a7c6c453ba2c527d2",
+			"revisionTime": "2017-02-16T18:52:47Z"
+		},
+		{
+			"checksumSHA1": "Wtpzndm/+bdwwNU5PCTfb4oUhc8=",
+			"path": "github.com/prometheus/common/expfmt",
+			"revision": "13ba4ddd0caa9c28ca7b7bffe1dfa9ed8d5ef207",
+			"revisionTime": "2017-04-27T09:54:55Z"
+		},
+		{
+			"checksumSHA1": "GWlM3d2vPYyNATtTFgftS10/A9w=",
+			"path": "github.com/prometheus/common/internal/bitbucket.org/ww/goautoneg",
+			"revision": "13ba4ddd0caa9c28ca7b7bffe1dfa9ed8d5ef207",
+			"revisionTime": "2017-04-27T09:54:55Z"
+		},
+		{
+			"checksumSHA1": "0LL9u9tfv1KPBjNEiMDP6q7lpog=",
+			"path": "github.com/prometheus/common/model",
+			"revision": "13ba4ddd0caa9c28ca7b7bffe1dfa9ed8d5ef207",
+			"revisionTime": "2017-04-27T09:54:55Z"
+		},
+		{
+			"checksumSHA1": "ziqY/FHc6pialrm9Xd2wUlS9f5w=",
+			"path": "github.com/prometheus/log",
+			"revision": "9a3136781e1ff7bc42736ba4acb81339b1422551",
+			"revisionTime": "2015-10-26T01:24:52Z"
+		},
+		{
+			"checksumSHA1": "BXx+yybEN6zHgNupHbRa1troevA=",
+			"path": "github.com/prometheus/procfs",
+			"revision": "a3bfc74126ea9e45ee5d5c6f7fc86191b7d488fb",
+			"revisionTime": "2017-06-09T12:32:08Z"
+		},
+		{
+			"checksumSHA1": "xCiFAAwVTrjsfZT1BIJQ3DgeNCY=",
+			"path": "github.com/prometheus/procfs/xfs",
+			"revision": "a3bfc74126ea9e45ee5d5c6f7fc86191b7d488fb",
+			"revisionTime": "2017-06-09T12:32:08Z"
+		},
+		{
+			"checksumSHA1": "pxNd7yTU1466GvCD8Es8/PM74ww=",
+			"path": "github.com/serenize/snaker",
+			"revision": "1c7f65329f6524115af8ca01ab604c00cddf5558",
+			"revisionTime": "2017-04-25T22:26:38Z"
+		},
+		{
+			"checksumSHA1": "PMvQLkGGzTONLhDg/9HxB89VWRs=",
+			"path": "github.com/vmware/govmomi",
+			"revision": "214d2ce3f17ecabc3dfc46aac3bbaac63c10d7aa",
+			"revisionTime": "2017-06-14T00:18:50Z"
+		},
+		{
+			"checksumSHA1": "L/z6VeAmwdnp4Prod4EAlTcPYRY=",
+			"path": "github.com/vmware/govmomi/find",
+			"revision": "214d2ce3f17ecabc3dfc46aac3bbaac63c10d7aa",
+			"revisionTime": "2017-06-14T00:18:50Z"
+		},
+		{
+			"checksumSHA1": "J3JrwZagGYMX6oNMkdsUFf8hHo8=",
+			"path": "github.com/vmware/govmomi/list",
+			"revision": "214d2ce3f17ecabc3dfc46aac3bbaac63c10d7aa",
+			"revisionTime": "2017-06-14T00:18:50Z"
+		},
+		{
+			"checksumSHA1": "zQz4weqDXCiYpathvULz3m48g/U=",
+			"path": "github.com/vmware/govmomi/object",
+			"revision": "214d2ce3f17ecabc3dfc46aac3bbaac63c10d7aa",
+			"revisionTime": "2017-06-14T00:18:50Z"
+		},
+		{
+			"checksumSHA1": "INNHeHhLFq+1BzuX/E3el2wZpVs=",
+			"path": "github.com/vmware/govmomi/property",
+			"revision": "214d2ce3f17ecabc3dfc46aac3bbaac63c10d7aa",
+			"revisionTime": "2017-06-14T00:18:50Z"
+		},
+		{
+			"checksumSHA1": "eqoHqcnyVN3klOJ89N7xmJhRgu0=",
+			"path": "github.com/vmware/govmomi/session",
+			"revision": "214d2ce3f17ecabc3dfc46aac3bbaac63c10d7aa",
+			"revisionTime": "2017-06-14T00:18:50Z"
+		},
+		{
+			"checksumSHA1": "FQR3yNgiShaqUiJREkeqQCKYJ84=",
+			"path": "github.com/vmware/govmomi/task",
+			"revision": "214d2ce3f17ecabc3dfc46aac3bbaac63c10d7aa",
+			"revisionTime": "2017-06-14T00:18:50Z"
+		},
+		{
+			"checksumSHA1": "zLg5y/6xx/yr8swoqdyxISyQfoU=",
+			"path": "github.com/vmware/govmomi/vim25",
+			"revision": "214d2ce3f17ecabc3dfc46aac3bbaac63c10d7aa",
+			"revisionTime": "2017-06-14T00:18:50Z"
+		},
+		{
+			"checksumSHA1": "xLvppq0NUD6Hv2GIx1gh75xUzyM=",
+			"path": "github.com/vmware/govmomi/vim25/debug",
+			"revision": "214d2ce3f17ecabc3dfc46aac3bbaac63c10d7aa",
+			"revisionTime": "2017-06-14T00:18:50Z"
+		},
+		{
+			"checksumSHA1": "FIwHoeb/lzICWAoECQkmKLJg4PE=",
+			"path": "github.com/vmware/govmomi/vim25/methods",
+			"revision": "214d2ce3f17ecabc3dfc46aac3bbaac63c10d7aa",
+			"revisionTime": "2017-06-14T00:18:50Z"
+		},
+		{
+			"checksumSHA1": "kiVMrAiW8EBFQvhDMHdE9SFe3N4=",
+			"path": "github.com/vmware/govmomi/vim25/mo",
+			"revision": "214d2ce3f17ecabc3dfc46aac3bbaac63c10d7aa",
+			"revisionTime": "2017-06-14T00:18:50Z"
+		},
+		{
+			"checksumSHA1": "tN9fHudMKhR3LjGw/V0fM4xXUJw=",
+			"path": "github.com/vmware/govmomi/vim25/progress",
+			"revision": "214d2ce3f17ecabc3dfc46aac3bbaac63c10d7aa",
+			"revisionTime": "2017-06-14T00:18:50Z"
+		},
+		{
+			"checksumSHA1": "AJtbBqLTzFe75nAfBVZctd6EnR0=",
+			"path": "github.com/vmware/govmomi/vim25/soap",
+			"revision": "214d2ce3f17ecabc3dfc46aac3bbaac63c10d7aa",
+			"revisionTime": "2017-06-14T00:18:50Z"
+		},
+		{
+			"checksumSHA1": "Iz9ypGIFux/NOWGGBi9Kyx3PwEQ=",
+			"path": "github.com/vmware/govmomi/vim25/types",
+			"revision": "214d2ce3f17ecabc3dfc46aac3bbaac63c10d7aa",
+			"revisionTime": "2017-06-14T00:18:50Z"
+		},
+		{
+			"checksumSHA1": "6XLRzLEvncx5ORtvBjp41KfRTjc=",
+			"path": "github.com/vmware/govmomi/vim25/xml",
+			"revision": "214d2ce3f17ecabc3dfc46aac3bbaac63c10d7aa",
+			"revisionTime": "2017-06-14T00:18:50Z"
+		},
+		{
+			"checksumSHA1": "Y+HGqEkYM15ir+J93MEaHdyFy0c=",
+			"path": "golang.org/x/net/context",
+			"revision": "dfe83d419c9403b40b19d08cdba2afec27b002f7",
+			"revisionTime": "2017-06-09T23:50:55Z"
+		},
+		{
+			"checksumSHA1": "Tkb1hBdBWeO7SGjixS2Hm48F6+s=",
+			"path": "golang.org/x/sys/unix",
+			"revision": "0b25a408a50076fbbcae6b7ac0ea5fbb0b085e79",
+			"revisionTime": "2017-06-08T11:43:49Z"
+		},
+		{
+			"checksumSHA1": "fALlQNY1fM99NesfLJ50KguWsio=",
+			"path": "gopkg.in/yaml.v2",
+			"revision": "cd8b52f8269e0feb286dfeef29f8fe4d5b397e0b",
+			"revisionTime": "2017-04-07T17:21:22Z"
+		}
+	],
+	"rootPath": "github.com/brandonweeks/vsphere_exporter"
+}
