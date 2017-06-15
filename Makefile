@@ -9,6 +9,8 @@ PREFIX        ?= $(shell pwd)
 BIN_DIR       ?= $(shell pwd)
 TARGET         = "vsphere_exporter"
 
+DOCKER_IMAGE_NAME       ?= brandonweeks/vsphere_exporter
+DOCKER_IMAGE_TAG        ?= $(subst /,-,$(shell git rev-parse --abbrev-ref HEAD))
 
 all: format vet build test
 
@@ -22,7 +24,7 @@ vet:
 
 gometalinter: $(GOMETALINTER)
 	@echo ">> linting code"
-	$(GOMETALINTER) $(pkgs)
+	$(GOMETALINTER) --vendor
 
 build: $(PROMU)
 	@echo ">> building binaries"
@@ -31,6 +33,10 @@ build: $(PROMU)
 test:
 	@echo ">> running tests"
 	@$(GO) test -short $(pkgs)
+
+docker:
+	@echo ">> building docker image"
+	@docker build -t "$(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_TAG)" .
 
 tarball: $(PROMU)
 	@echo ">> building release tarball"
