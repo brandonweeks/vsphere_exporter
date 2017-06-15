@@ -22,12 +22,13 @@ import (
 	"os"
 	"strings"
 
+	"golang.org/x/net/context"
 	"gopkg.in/yaml.v2"
 
-	"golang.org/x/net/context"
-
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/log"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"github.com/prometheus/common/log"
+	"github.com/prometheus/common/version"
 	"github.com/serenize/snaker"
 	"github.com/vmware/govmomi"
 	"github.com/vmware/govmomi/find"
@@ -40,6 +41,7 @@ var (
 	listenAddress = flag.String("web.listen-address", ":9155", "Address on which to expose metrics and web interface.")
 	metricsPath   = flag.String("web.telemetry-path", "/metrics", "Path under which to expose Prometheus metrics.")
 	configFile    = flag.String("config.file", "", "vsphere_exporter configuration file name.")
+	showVersion   = flag.Bool("version", false, "Show version information and exit")
 )
 
 type Config struct {
@@ -173,6 +175,14 @@ func (e *Exporter) Collect(ch chan<- prometheus.Metric) {
 func main() {
 	flag.Parse()
 
+	if *showVersion {
+		fmt.Fprintln(os.Stdout, version.Print("vsphere_exporter"))
+		os.Exit(0)
+	}
+
+	log.Infoln("Starting vSphere Metrics Exporter", version.Info())
+	log.Infoln("Build context", version.BuildContext())
+
 	config := DefaultConfig()
 
 	if *configFile != "" {
@@ -190,8 +200,25 @@ func main() {
 	exporter := NewExporter(config)
 	prometheus.MustRegister(exporter)
 
-	http.Handle(*metricsPath, prometheus.Handler())
+	handler := promhttp.HandlerFor(prometheus.DefaultGatherer, promhttp.HandlerOpts{ErrorLog: log.NewErrorLogger()})
+
+	http.Handle(*metricsPath, prometheus.InstrumentHandler("prometheus", handler))
+
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte(`<html>
+			<head><title>vSphere Exporter</title></head>
+			<body>
+			<h1>vSphere Exporter</h1>
+			<p><a href="` + *metricsPath + `">Metrics</a></p>
+			</body>
+			</html>`))
+	})
 
 	log.Infof("Starting Server: %s", *listenAddress)
-	http.ListenAndServe(*listenAddress, nil)
+
+	err := http.ListenAndServe(*listenAddress, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 }

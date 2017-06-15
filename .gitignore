@@ -1,1 +1,5 @@
-vmware_exporter
+# Editor files #
+################
+*~
+
+vsphere_exporter
