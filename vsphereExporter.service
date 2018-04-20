@@ -1,0 +1,13 @@
+[Unit]
+Description=vSphere prometheus exporter
+After=network.target
+
+[Service]
+Type=simple
+User=nobody
+WorkingDirectory=/usr/local/src/vsphereExporter
+ExecStart=/usr/local/src/vsphereExporter/bin/vsphereExporter -config.file vsphere_exporter.yml -web.listen-address localhost:9155
+Restart=always # or always, on-abort, etc
+RestartSec=30
+[Install]
+WantedBy=multi-user.target
