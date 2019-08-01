@@ -27,6 +27,7 @@ import (
 	"golang.org/x/net/context"
 
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/prometheus/log"
 	"github.com/serenize/snaker"
 	"github.com/vmware/govmomi"
@@ -210,7 +211,7 @@ func main() {
 	exporter := NewExporter(config)
 	prometheus.MustRegister(exporter)
 
-	http.Handle(*metricsPath, prometheus.Handler())
+	http.Handle(*metricsPath, promhttp.Handler())
 
 	log.Infof("Starting Server: %s", *listenAddress)
 	http.ListenAndServe(*listenAddress, nil)
