@@ -27,6 +27,7 @@ import (
 	"golang.org/x/net/context"
 
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/prometheus/log"
 	"github.com/serenize/snaker"
 	"github.com/vmware/govmomi"
@@ -120,13 +121,29 @@ func NewExporter(config *Config) *Exporter {
 
 var countersInfoMap = make(map[int]*prometheus.Desc)
 
+
+func ignoreMetric(metricName string) bool {
+	ignoreMetricsList := []string{"vsphere_sys_resource_cpu", "vsphere_storage_path_", "vsphere_disk_", "vsphere_storage_", "vsphere_sys_resource_"}
+	for _,prefix := range ignoreMetricsList {
+		if  ( strings.HasPrefix(metricName, prefix) ) {
+			return true
+		}
+	}
+	return false
+}
+
+
 func (e *Exporter) Describe(ch chan<- *prometheus.Desc) {
 	for _, perfCounterInfo := range e.performanceManager.PerfCounter {
 		groupInfo := perfCounterInfo.GroupInfo.GetElementDescription()
 		nameInfo := perfCounterInfo.NameInfo.GetElementDescription()
 		unitInfo := perfCounterInfo.UnitInfo.GetElementDescription()
 		metricName := fmt.Sprintf("vsphere_%s_%s_%s", snaker.CamelToSnake(groupInfo.Key), strings.Join(strings.Split(snaker.CamelToSnake(nameInfo.Key), "."), "_"), snaker.CamelToSnake(unitInfo.Key))
-		labels := []string{"host", "instance", "entity"}
+		
+		if (ignoreMetric(metricName)) {
+			continue
+		}
+		labels := []string{"host", "entity"}
 		desc := prometheus.NewDesc(metricName, nameInfo.Summary, labels, nil)
 		countersInfoMap[int(perfCounterInfo.Key)] = desc
 		ch <- desc
@@ -162,8 +179,12 @@ func (e *Exporter) Collect(ch chan<- prometheus.Metric) {
 				series := baseSeries.(*types.PerfMetricIntSeries)
 				desc := countersInfoMap[int(series.Id.CounterId)]
 				if desc != nil {
+					entity := string(series.Id.Instance)
+					if (len(entity) == 0) {
+						entity = "all"
+					}
 					ch <- prometheus.MustNewConstMetric(desc,
-						prometheus.GaugeValue, float64(series.Value[0]), hostName, series.Id.Instance, metric.Entity.Type)
+						prometheus.GaugeValue, float64(series.Value[0]), hostName, entity)
 				}
 			}
 		}
@@ -190,7 +211,7 @@ func main() {
 	exporter := NewExporter(config)
 	prometheus.MustRegister(exporter)
 
-	http.Handle(*metricsPath, prometheus.Handler())
+	http.Handle(*metricsPath, promhttp.Handler())
 
 	log.Infof("Starting Server: %s", *listenAddress)
 	http.ListenAndServe(*listenAddress, nil)
